@@ -65,6 +65,7 @@ import scala.collection.Seq;
 
 @Component
 @Slf4j
+//fdfddfd
 public class MecBatchListener implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Getter
