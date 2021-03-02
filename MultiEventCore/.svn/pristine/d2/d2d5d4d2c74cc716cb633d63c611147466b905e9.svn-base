@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:drools="http://drools.org/schema/drools-spring" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:kie="http://drools.org/schema/kie-spring" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd        
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd
+    http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<task:annotation-driven></task:annotation-driven>
+	<aop:aspectj-autoproxy />
+
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>file:/etc/risqvu_di/MultiEventCoreConfig/MultiEventCore.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean name="sparkConf" id="sparkConf" class="org.apache.spark.SparkConf">
+		<property name="appName" value="MultiEventCore" />
+		<property name="master" value="local[*]" />
+	</bean>
+
+	<bean id="MultiEventCoreSparkListener" class="net.paladion.listener.MultiEventCoreSparkListener"
+		init-method="init" autowire="byName">
+		<constructor-arg ref="clientProp" />
+		<property name="sparkConf" ref="sparkConf"></property>
+		<property name="streamReceiver" ref="kafkaThreatReceiver" />
+		<property name="streamingBackpressure" value="${spark.streaming.backpressure.enabled}" />
+		<property name="kafkaMaxPartition" value="${spark.streaming.kafka.maxRatePerPartition}" />
+	</bean>
+	<util:properties id="clientProp"
+		location="file:/etc/risqvu_di/MultiEventCoreConfig/MultiEventCore.properties" />
+
+	<bean id="kafkaThreatReceiver" class=" net.paladion.model.KafkaThreatSimcoreReceiver"
+		autowire="byName">
+		<constructor-arg ref="clientProp" />
+		<property name="brokers" value="${spark.kafka.receiver.brokers}" />
+		<property name="topics" value="${spark.kafka.receiver.topics}" />
+	</bean>
+</beans>

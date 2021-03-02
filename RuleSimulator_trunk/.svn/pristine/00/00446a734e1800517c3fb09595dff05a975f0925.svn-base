@@ -1,0 +1,14 @@
+FollowedBy Rule~#~failure rule~#~fileName=='file1'~#~YES~#~~#~~#~~#~~#~~#~~#~~#~~#~~#~
+FollowedBy Rule~#~success rule~#~fileName=='file2'~#~YES~#~2~#~1M~#~4000~#~Every~#~~#~sourceAddress,sourcePort~#~~#~~#~failure rule
+Standard Rule~#~rule11~#~fileName=='file2'~#~YES~#~3~#~30S~#~4000~#~EveryMore~#~~#~~#~~#~~#~
+Lightweight Rule~#~rule2~#~categoryOutcome=='/Failure'~#~No~#~~#~~#~~#~~#~~#~~#~~#~IpList:sourceAddress,destinationAddress~#~
+Lightweight Rule~#~rule3~#~categoryOutcome=='/Failure1'~#~No~#~~#~~#~~#~~#~~#~~#~~#~portList:sourcePort,destinationPort~#~
+Standard Rule~#~rule4~#~fileName=='file1' && InActiveList('IpList')~#~No~#~3~#~30S~#~4000~#~EveryMore~#~~#~~#~~#~~#~
+Standard Rule~#~rule5~#~fileName=='file2' && InActiveList('IpList:sourceAddress')~#~No~#~3~#~30S~#~4000~#~EveryMore~#~~#~~#~~#~~#~
+Standard Rule~#~rule6~#~fileName=='file1' && NotInActiveList('portList')~#~No~#~3~#~30S~#~4000~#~EveryMore~#~~#~~#~~#~~#~
+Standard Rule~#~rule7~#~fileName=='file2' && NotInActiveList('IpList:sourcePort')~#~No~#~3~#~30S~#~4000~#~EveryMore~#~~#~~#~~#~~#~
+Standard Rule~#~Windows Shutdown-Reboot~#~deviceVendor=='Microsoft' && (deviceEventClassId=='Security:512' || (deviceEventClassId!=null &&  deviceEventClassId.toLowerCase()=='security:513') || deviceEventClassId=='Security:6008')~#~No~#~~#~~#~1000~#~~#~~#~~#~~#~~#~
+Standard Rule~#~Windows Audit Policy Change~#~deviceEventClassId=='Security:612' && deviceVendor=='Microsoft'~#~No~#~~#~~#~2000~#~~#~~#~~#~~#~~#~
+Standard Rule~#~Windows User Created- Deleted~#~deviceVendor=='Microsoft' && deviceEventClassId in ('Security:624','Security:630')~#~No~#~~#~~#~3000~#~~#~~#~~#~~#~~#~
+Standard Rule~#~Windows Group Created Deleted~#~deviceVendor=='Microsoft' && deviceEventClassId in ('Security:631','Security:634','Security:635','Security:638')~#~No~#~~#~~#~4000~#~~#~~#~~#~~#~~#~
+Standard Rule~#~Windows Group Member Added Removed~#~deviceProduct=='Microsoft Windows' && deviceEventClassId in ('Security:632','Security:633','Security:636','Security:637','Security:650','Security:651','Security:655','Security:656','Security:660','Security:661','Security:665','Security:666')~#~No~#~~#~~#~5000~#~~#~~#~~#~~#~~#~

@@ -1,0 +1,2 @@
+10001~#~Stream Rule~#~Standard Rule~#~IPS/IDS - Signature Detected To Blacklisted IP src ~#~sourceZone=='DMZ'~#~No~#~~#~0~#~~#~~#~~#~~#~~#~~#~virusOutbreakList~####~sourceHostName~##~.*\'([^\']*)\'.*~##~name~###~deviceVendor~#~~#~~#~~#~activelist,trigger
+10002~#~Stream Rule~#~Standard Rule~#~IPS/IDS - Signature Detected To Blacklisted IP dest~#~destinationZone=='DMZ'~#~No~#~~#~0~#~~#~~#~~#~~#~~#~~#~virusOutbreakList~####~sourceHostName~##~.*\'([^\']*)\'.*~##~name~###~deviceVendor~#~~#~~#~~#~activelist,trigger

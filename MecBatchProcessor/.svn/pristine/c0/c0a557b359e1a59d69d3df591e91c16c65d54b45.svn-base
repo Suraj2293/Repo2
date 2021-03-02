@@ -1,0 +1,189 @@
+package net.paladion.dao;
+
+import static scala.collection.JavaConversions.asScalaBuffer;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+
+import kafka.utils.ZkUtils;
+import lombok.extern.slf4j.Slf4j;
+import net.paladion.model.KafkaDTO;
+
+import org.I0Itec.zkclient.ZkClient;
+import org.I0Itec.zkclient.ZkConnection;
+
+import scala.Tuple2;
+import scala.collection.Map;
+import scala.collection.Seq;
+
+/**
+ * 
+ * @author Karthik Madhu
+ *
+ */
+@Slf4j
+public class KafkaOffsetDaoImpl implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private final Properties clientProp;
+
+	public KafkaOffsetDaoImpl(Properties clientProp1) {
+		this.clientProp = clientProp1;
+	}
+
+	/**
+	 * 
+	 * @param kafkaDTOList
+	 */
+	public void savingOffset(List<KafkaDTO> kafkaDTOList) {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		String upQuery = "upsert into "
+				+ clientProp.getProperty("phoenix.schemaname")
+				+ ".batch_offsets" + "(TOPIC,PARTITION,OFFSETS) values(?,?,?)";
+		try {
+			connection = getPhnxConnection();
+			connection.setAutoCommit(false);
+			ps = connection.prepareStatement(upQuery);
+			for (KafkaDTO lis : kafkaDTOList) {
+				ps.setString(1, lis.getTopic());
+				ps.setInt(2, lis.getPartition());
+				ps.setLong(3, lis.getOffsets());
+				ps.executeUpdate();
+			}
+			connection.commit();
+
+		} catch (Exception e) {
+			log.error("Error in savingOffset Method :" + e.getMessage()
+					+ e.getCause() + "Query: " + upQuery);
+		} finally {
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+			} catch (Exception e) {
+				log.error("Exception in closing prepared statement: "
+						+ e.getMessage());
+			}
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				log.error("Error in closing connection :" + e.getMessage()
+						+ e.getCause());
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @return list
+	 */
+	public List<KafkaDTO> readOffsets() {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<KafkaDTO> resultSet = new ArrayList<KafkaDTO>();
+		String rQuery = "select * from "
+				+ clientProp.getProperty("phoenix.schemaname")
+				+ ".batch_offsets";
+		try {
+			connection = getPhnxConnection();
+			ps = connection.prepareStatement(rQuery);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				KafkaDTO kafkaDTO = new KafkaDTO();
+				kafkaDTO.setTopic(rs.getString("TOPIC"));
+				kafkaDTO.setPartition(rs.getInt("PARTITION"));
+				kafkaDTO.setOffsets(rs.getLong("OFFSETS"));
+				resultSet.add(kafkaDTO);
+			}
+
+		} catch (Exception e) {
+
+			log.error("Error in readOffsets Method :" + e.getMessage()
+					+ e.getCause() + "Query: " + rQuery);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (Exception e) {
+				log.error("Exception in closing result set: " + e.getMessage());
+			}
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+			} catch (Exception e) {
+				log.error("Exception in closing prepared statement: "
+						+ e.getMessage());
+			}
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				log.error("Exception in closing connection :" + e.getMessage()
+						+ e.getCause());
+			}
+		}
+		return resultSet;
+	}
+
+	/**
+	 * 
+	 * @param topic
+	 * @return
+	 */
+	public Integer getPartitions(String topic) {
+		Tuple2<ZkClient, ZkConnection> zkClientAndConnection = ZkUtils
+				.createZkClientAndConnection(
+						clientProp.getProperty("zookeeper.url"), 2000, 3000);
+		ZkUtils zkUtils = new ZkUtils(zkClientAndConnection._1,
+				zkClientAndConnection._2, false);
+		Map<String, Seq<Object>> zkNum = zkUtils
+				.getPartitionsForTopics(asScalaBuffer(Collections
+						.singletonList(topic)));
+		if (zkNum.get(topic).isDefined()) {
+			return zkNum.get(topic).get().size();
+		}
+		try {
+			zkClientAndConnection._1.close();
+		} catch (Exception e) {
+			log.error("Excpetion occured while closing zkClientAndConnection1: "
+					+ e.getMessage());
+		}
+		try {
+			zkClientAndConnection._2.close();
+		} catch (InterruptedException e) {
+			log.error("Excpetion occured while closing zkClientAndConnection2: "
+					+ e.getMessage());
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return connection
+	 */
+	public Connection getPhnxConnection() {
+		Connection connection = null;
+		try {
+			Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
+			connection = DriverManager.getConnection(clientProp
+					.getProperty("phoenix.database.url"));
+		} catch (Exception e) {
+			log.error("Error in getPhnxConnection Method " + e.getMessage());
+		}
+
+		return connection;
+	}
+}

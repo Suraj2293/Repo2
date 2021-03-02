@@ -1,0 +1,23 @@
+package net.paladion.model.simcorerule
+dialect "mvel"
+
+import java.lang.*;
+import java.util.*
+import net.paladion.model.MultiEventCoreDTO;
+import net.paladion.model.RuleMatchDTO;
+
+rule "rule2_2"
+  	when
+     		$s: MultiEventCoreDTO(categoryBehavior=='OK')
+	then
+		$s.getRuleMatchDTOList().add(new RuleMatchDTO(2,'Yes',3,'1M',4000,'EveryMore','categoryBehavior,customerName'));
+end
+
+rule "rule1_1"
+  	when
+     		$s: MultiEventCoreDTO(categoryBehavior=='SUSPECT')
+	then
+		$s.getRuleMatchDTOList().add(new RuleMatchDTO(1,'Yes',3,'1M',4000,'EveryMore','categoryBehavior,customerName'));
+end
+
+

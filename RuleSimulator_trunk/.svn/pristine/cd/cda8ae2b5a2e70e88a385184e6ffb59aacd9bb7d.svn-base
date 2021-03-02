@@ -1,0 +1,34 @@
+template header
+ruleType
+ruleSubType
+ruleName
+ruleId
+ruleCondition
+thresholdApplicable
+eventAThresholdValue
+eventBThresholdValue
+timeWindowUnit
+timeWindowValue
+rulePriority
+thresholdCondition
+identicalColStr
+distinctColStr
+lightweightStr
+follwedByRuleName
+severity
+recommendations
+actions
+
+template "rulematchtemplate"
+
+rule "@{ruleName}_@{ruleId}"
+  	when
+		$m: MultiEventCoreDTO()
+     		$s: MultiEventCoreDTO(@{ruleCondition})
+	then
+		$s.getRuleMatchDTOList().add(new RuleMatchDTO('@{ruleType}','@{ruleSubType}','@{ruleName}',@{ruleId},'@{thresholdApplicable}',@{eventAThresholdValue},@{eventBThresholdValue},'@{timeWindowUnit}',@{timeWindowValue},@{rulePriority},'@{thresholdCondition}','@{identicalColStr}','@{distinctColStr}','@{lightweightStr}','@{follwedByRuleName}','@{severity}','@{recommendations}','@{actions}'));
+		$s.getRuleMatchIdList().add(@{ruleId});
+    		 
+end
+
+end template

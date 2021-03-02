@@ -1,0 +1,167 @@
+################ The value of the properties in this section can be  changed as required ############################
+
+#Kafka Properties
+spark.kafka.receiver.brokers=localhost:9092,localhost:9093,localhost:9094
+spark.kafka.receiver.topics=McafeeData
+
+kafka.broker.send.list=localhost:9092,localhost:9093,localhost:9094
+kafka.send.topic=McafeeDateReciever
+
+#Database Properties
+phoenix.database.url=jdbc:phoenix:sandbox.hortonworks.com:2181:/hbase-unsecure:hbase
+phoenix.schemaname=multievent
+
+streamingDurationInSeconds=60
+
+variable_sequence=applicationProtocol,baseEventCount,bytesIn,bytesOut,destinationAddress,destinationHostName,destinationPort,destinationProcessName,destinationServiceName,destinationUserName,deviceAction,deviceAddress,deviceCustomNumber1,deviceCustomNumber2,deviceCustomNumber3,deviceCustomString1,deviceCustomString2,deviceCustomString3,deviceCustomString4,deviceCustomString5,deviceCustomString6,deviceDirection,deviceEventCategory,deviceEventClassId,deviceHostName,deviceInboundInterface,deviceOutboundInterface,deviceProcessName,deviceProduct,deviceReceiptTime,deviceSeverity,deviceVendor,endTime,eventId,externalId,fileName,filePath,flexString1,message,name,reason,requestClientApplication,requestContext,requestCookie,requestCookies,requestMethod,requestUrl,requestUrlFileName,sourceAddress,sourceHostName,sourceNtDomain,sourcePort,sourceUserName,startTime,transportProtocol,categoryBehavior,categoryOutcome,customerURI,customerName,sourceGeoCityName,sourceGeoCountryName,destinationGeoCityName,destinationGeoCountryName,sourceZone,destinationZone,customer
+
+multiEventCoreFirstStepEnabled=true
+rawDataInsertStepEnabled=true
+ruleExecuterStepEnabled=true
+droolsRuleInsertStepEnabled=true
+thresholdExecuterStepEnabled=true
+finalInsertStepEnabled=true
+alertGenerationStepEnabled=true
+
+reloadDroolsInMinutes=5
+reloadTiFeedInMinutes=1440
+
+drlFileTemplatePath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/archsight_rules.txt
+newdrlRuleCsvPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/add_new_archsight_rule.csv
+drtTemplatePath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/archsight_rules.drt
+activeRulesCsvPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/archive/rules.csv
+drlBackUpPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/drlLog/drlLog.txt
+activeListPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/activeList
+mappingPath=/etc/risqvu_di/MultiEventCoreConfig/MapProperties.properties
+custTopicMap=/etc/risqvu_di/MultiEventCoreConfig/topicMap.properties
+rulesToDeploy=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/rules_to_deploy/
+deployedRules=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/deployed_rule/
+rulesLogHistory=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/rule_log_history/
+securityRuleCSVPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/rules_to_deploy/automatic.csv
+manualRuleCSVPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/rules_to_deploy/manual.csv
+geoliteDbFilePath=/etc/risqvu_di/MultiEventCoreConfig/GeoLite2-City/GeoLite2-City.mmdb
+deployedRulesAutomaticCSVPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/deployed_rule/automatic.csv
+deployedRulesmanualRuleCSVPath=/etc/risqvu_di/MultiEventCoreConfig/config/Other_Files/archsight_rules/deployed_rule/manual.csv
+
+convertDateToUtc=true
+
+insertInThreatTable=true
+
+partitionReq=false
+partition.number=1
+
+followedByRuleName=followedby rule
+lightweightRuleName=lightweight rule
+batchRuleName=batch rule
+
+alertTriggerAction=trigger
+activeListAction=activelist
+
+batchRuleTopicName=batchRuleTopic
+
+threatRaw.tableName=threat_raw_21_02_2017
+partialRuleMatch.tableName=partial_rule_match_16_03_2017
+
+geoLocationEnabled=true
+
+#column name mapping
+eventTime = et
+threatId = tI
+applicationProtocol = aa
+baseEventCount = ab
+bytesIn = ac
+bytesOut = ad
+destinationAddress = ae
+destinationHostName = af
+destinationPort = ag
+destinationProcessName = ah
+destinationServiceName = ai
+destinationUserName = aj
+deviceAction = ak
+deviceAddress = al
+deviceCustomNumber1 = am
+deviceCustomNumber2 = an
+deviceCustomNumber3 = ao
+deviceCustomString1 = ap
+deviceCustomString2 = aq
+deviceCustomString3 = ar
+deviceCustomString4 = da
+deviceCustomString5 = at
+deviceCustomString6 = au 
+deviceDirection = av
+deviceEventCategory = aw
+deviceEventClassId = ax
+deviceHostName = ay
+deviceInboundInterface = az
+deviceOutboundInterface = ba
+deviceProcessName = bb
+deviceProduct = bc
+deviceReceiptTime = bd
+deviceSeverity = be
+deviceVendor = bf
+endTime = bg
+eventId = bh
+externalId = bi
+fileName = bj
+filePath = bk
+flexString1 = bl
+message = bm
+name = bn
+reason = bo
+requestClientApplication = bp
+requestContext = bq
+requestCookie = br
+requestCookies = bs
+requestMethod = bt
+requestUrl = bu
+requestUrlFileName = bv
+sourceAddress = bw
+sourceHostName = bx
+sourceNtDomain = db
+sourcePort = dc
+sourceUserName = bz
+startTime = ca
+transportProtocol = cb
+categoryBehavior = cg
+categoryOutcome = ch
+customerURI = ci
+adrCustomStr1 = cj
+adrCustomStr2 = ck
+adrCustomStr3 = cl
+adrCustomStr4 = cm
+adrCustomeNumber1 = cn
+others = co
+matchedRuleId = mR
+matchedParentId = mP
+ruleIdActed = ra
+customerName = cu
+sourceGeoCityName=cp
+sourceGeoCountryName=cq
+destinationGeoCityName=cr
+destinationGeoCountryName=cs
+sourceZone=sz
+destinationZone=dz
+customer=ct
+
+kafka.serializer.class=kafka.serializer.StringEncoder
+kafka.request.required.acks=-1
+kafka.retries=0
+kafka.batch.size=200000
+kafka.linger.ms=15000
+kafka.buffer.memory=33554432
+kafka.key.serializer=
+kafka.value.serializer=
+kafka.compression.type=gzip
+
+domainTiFullMatch=true
+domainTiPartialMatch=true
+useDomainCheckJar=true
+
+zookeeper.url=
+spark.streaming.backpressure.enabled=
+spark.streaming.kafka.maxRatePerPartition=
+
+loggerDelayThreshold=
+delayLogger.tableName=delay_logger
+
+dataSplitter=,(?=(?:[^\"*\"},{\"*\"]))

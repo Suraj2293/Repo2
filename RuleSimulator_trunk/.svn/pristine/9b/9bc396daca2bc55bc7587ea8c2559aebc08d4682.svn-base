@@ -1,0 +1,11 @@
+package net.paladion.model.simcorerule
+dialect "mvel"
+
+import java.lang.*;
+import java.util.*
+import net.paladion.model.MultiEventCoreDTO;
+import net.paladion.model.RuleMatchDTO;
+
+global net.paladion.rule.RuleCustomCondition RuleCustomCondition
+global net.paladion.rule.InActiveConditions InActiveConditions
+global java.sql.Connection Connection
